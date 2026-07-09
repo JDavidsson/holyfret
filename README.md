@@ -1,0 +1,1 @@
+This project aims to make capable, user-friendly webapp to help string instrumentalist to learn about their instrument.
