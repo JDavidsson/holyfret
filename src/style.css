@@ -1,0 +1,762 @@
+/* Self-hosted Karla (latin subset, variable 400-700) — no Google Fonts
+ * request, so no third-party IP disclosure and it works offline. */
+@font-face {
+    font-family: 'Karla';
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url('vendor/karla-latin.woff2') format('woff2');
+}
+
+:root {
+    --board-bg: white;
+    --string-line: rgb(192, 192, 192);
+    --fret-wire: rgb(192, 192, 192);
+    --nut-bar: rgb(109, 109, 109);
+    --marker-bg: rgb(192, 192, 192);
+    --marker-selected: rgb(70, 70, 70);
+    --marker-root: rgb(160, 160, 160);
+    --marker-root-selected: rgb(25, 25, 25);
+    --marker-emph: rgb(150, 150, 150);
+    --marker-emph-selected: rgb(0, 0, 0);
+    --marker-text: white;
+    --board-text: rgb(133, 133, 133);
+    --inlay: rgba(0, 0, 0, 0.1);
+}
+
+/* the hidden attribute must always win, even over display:flex rules */
+[hidden] {
+    display: none !important;
+}
+
+html {
+    font-size: 12px;
+}
+
+body {
+    font-family: "Karla", sans-serif;
+    margin: 1rem 2rem;
+}
+
+small {
+    font-size: 1rem;
+}
+
+.smaller {
+    font-size: 0.8rem;
+}
+
+/* top bar: the clickable holyfret.com logo on the left, site nav on the
+ * right, baseline-aligned; the nav wraps under on narrow screens */
+.header-bar {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.2rem 1rem;
+    margin: 1rem 0 0.6rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgb(224, 224, 224);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: inherit;
+    text-decoration: none;
+}
+
+.logo:hover {
+    text-decoration: underline;
+}
+
+/* the subtitle (rotating pun, then the one-line pitch) under the top bar */
+.slogan {
+    max-width: 42rem;
+    margin: 0;
+    font-style: italic;
+    line-height: 1.4;
+    color: rgb(120, 120, 120);
+}
+
+footer {
+    margin-top: 2rem;
+}
+
+/* the free/made-by + support line, one block above the donation buttons */
+.footer-info {
+    max-width: 46rem;
+    margin-bottom: 0.6rem;
+    overflow-wrap: break-word;   /* long email/link never overflows narrow phones */
+}
+
+/* site navigation (header top-bar, and footer of content/landing pages) */
+.sitenav {
+    font-size: 0.95rem;
+    color: rgb(150, 150, 150);
+}
+
+.sitenav a {
+    margin: 0 0.25rem;
+}
+
+/* draft / placeholder markers on the About and Tutorials pages —
+ * deliberately loud so the example text is obviously unfinished */
+.draft-note {
+    background: #fff3cd;
+    border: 1px solid #ffe08a;
+    padding: 0.5rem 0.8rem;
+    border-radius: 0.3rem;
+    font-size: 0.95rem;
+}
+
+.placeholder {
+    color: rgb(150, 120, 40);
+    font-style: italic;
+    background: #fbf6e7;
+    border-left: 3px solid #e0c060;
+    padding: 0.3rem 0.6rem;
+}
+
+/* control panel: each label is a small column (caption above control),
+ * rows wrap so the same layout works from phone to desktop */
+
+.options {
+    margin: 1.5rem 0;
+}
+
+.control-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem 1.5rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.control-row label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-weight: bold;
+}
+
+.control-row input,
+.control-row select,
+.control-row button {
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.control-row input[type="number"] {
+    width: 3.6rem;
+}
+
+.pair {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.checkbox-label input {
+    width: 1.3rem;
+    height: 1.3rem;
+    margin: 0.2rem 0 0;
+}
+
+/* a control whose feature can't apply right now is visibly faded */
+.checkbox-label:has(input:disabled) {
+    opacity: 0.45;
+}
+
+/* interval/note checkboxes stay side-by-side (text left of the box) */
+.interval-checkbox {
+    flex-direction: row !important;
+    align-items: center;
+    font-weight: bold;
+}
+
+/* same style as the control captions (Instrument, Key, ...) */
+.section-label {
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+}
+
+.section-head {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.3rem;
+}
+
+.section-head .section-label {
+    margin-bottom: 0;
+}
+
+#reset-selection,
+#full-reset {
+    font-family: inherit;
+    font-size: 0.85rem;
+    padding: 0.05rem 0.5rem;
+    cursor: pointer;
+}
+
+#full-reset {
+    align-self: center;
+}
+
+/* the instrument box when strings/frets are hand-picked and no preset
+ * instrument applies anymore */
+.dimmed {
+    opacity: 0.45;
+}
+
+#custom-tuning {
+    gap: 0.6rem;
+}
+
+.custom-string {
+    display: flex;
+    gap: 0.15rem;
+}
+
+/* summary line above the board */
+
+.summary {
+    margin: 0.5rem 0 0.2rem;
+    color: rgb(70, 70, 70);
+}
+
+/* chords/scales that the current selection contains or equals;
+ * rendered as clickable chips, hover previews them on the board */
+.matches {
+    margin: 0 0 0.5rem;
+    min-height: 1.2rem;
+}
+
+.match-line {
+    margin: 0.15rem 0;
+    color: rgb(109, 109, 109);
+    font-size: 0.95rem;
+}
+
+.match-chip {
+    display: inline-block;
+    cursor: pointer;
+    padding: 0.05rem 0.5rem;
+    margin: 0.1rem 0.15rem;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 1rem;
+    background: white;
+}
+
+.match-chip:hover {
+    background: rgb(70, 70, 70);
+    color: white;
+}
+
+/* matches in the currently selected key come first, in bold */
+.match-chip.samekey {
+    font-weight: bold;
+    border-color: rgb(133, 133, 133);
+}
+
+
+/* searchable dropdowns (combobox.js) */
+
+.combobox {
+    position: relative;
+    display: inline-block;
+}
+
+/* the input gets a select-style chevron; width is set by combobox.js
+ * to fit the longest option */
+.combobox input {
+    box-sizing: border-box;
+    padding-right: 1.5rem;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23666666' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 0.45rem center;
+}
+
+.combobox-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    min-width: 100%;
+    max-height: 18rem;
+    overflow-y: auto;
+
+    background: white;
+    border: 1px solid rgb(187, 187, 187);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.combobox-item {
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+    white-space: nowrap;
+    font-weight: normal;
+}
+
+.combobox-item.selected {
+    font-weight: bold;
+}
+
+.combobox-item:hover,
+.combobox-item.active {
+    background: rgb(70, 70, 70);
+    color: white;
+}
+
+/* fretboard */
+
+.fretboard {
+    position: relative;
+    width: fit-content;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 1rem 0;
+}
+
+.string {
+    display: flex;
+}
+
+/* inlay dots sit above the wood but under the markers */
+.inlay-dot {
+    position: absolute;
+    z-index: 1;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    background: var(--inlay);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+/* open-string names to the left of the nut */
+.string-label {
+    box-sizing: border-box;
+    flex-shrink: 0;
+    width: 1.8rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--board-text);
+}
+
+.fret-numbers .string-label {
+    height: auto;
+}
+
+/* every cell on a string: fixed-size box with the string line
+ * running through its vertical middle, contents dead-centered on it */
+.fret,
+.nut {
+    box-sizing: border-box;
+    flex-shrink: 0;
+    height: 2rem;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* the horizontal gradient band is the string itself */
+    background-image: linear-gradient(180deg,
+        transparent calc(50% - 0.08rem),
+        var(--string-line) calc(50%),
+        transparent calc(50% + 0.08rem));
+}
+
+.fret {
+    /* the neck's wood spans exactly the fretted area — the open-string
+     * cell before the nut stays on the page background */
+    background-color: var(--board-bg);
+    /* the left border is the fret wire */
+    border-left: 0.24rem groove var(--fret-wire);
+}
+
+.nut {
+    width: 2.5rem;
+    border-right: 0.5rem solid var(--nut-bar);
+}
+
+.marker {
+    position: relative;
+    z-index: 2;
+    width: 1.7rem;
+    height: 1.7rem;
+    border-radius: 50%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 0.8rem;
+    background-color: var(--marker-bg);
+    text-shadow: 0 0 1px rgb(133, 133, 133);
+    color: var(--marker-text);
+}
+
+/* in "both" mode each marker holds two stacked lines: interval + note */
+.marker-line {
+    font-size: 0.6rem;
+    line-height: 0.7rem;
+}
+
+.marker.highlight {
+    background-color: var(--marker-selected);
+}
+
+/* the key's root note is always a touch darker than its peers */
+.marker.root {
+    background-color: var(--marker-root);
+}
+
+.marker.highlight.root {
+    background-color: var(--marker-root-selected);
+}
+
+/* hover emphasis (from the match chips) wins over the root tint */
+.marker.emph {
+    background-color: var(--marker-emph);
+}
+
+.marker.highlight.emph {
+    background-color: var(--marker-emph-selected);
+}
+
+.marker.hidden-marker {
+    visibility: hidden;
+}
+
+/* "Show tab" spotlight: the voicing's positions stay crisp while the
+ * rest of the board fades back — dimmed enough to recede, but still
+ * legible so the surrounding shape stays readable */
+.marker.tab-dim {
+    opacity: 0.4;
+    filter: blur(0.3px);
+}
+
+.string-label.muted {
+    opacity: 0.45;
+}
+
+.string-label.muted::after {
+    content: '\00d7';
+    margin-left: 0.15rem;
+}
+
+/* left-handed: mirror the board by reversing each row and flipping
+ * the borders that draw the nut and the fret wires */
+
+.fretboard.lefty .string,
+.fretboard.lefty .fret-numbers {
+    flex-direction: row-reverse;
+}
+
+.fretboard.lefty .fret {
+    border-left: none;
+    border-right: 0.24rem groove var(--fret-wire);
+}
+
+.fretboard.lefty .nut {
+    border-right: none;
+    border-left: 0.5rem solid var(--nut-bar);
+}
+
+.fretboard.lefty .fret-number {
+    border-left: none;
+    border-right: 0.24rem solid transparent;
+}
+
+.fretboard.lefty .nut-number {
+    border-right: none;
+    border-left: 0.5rem solid transparent;
+}
+
+.fretboard.lefty .string-label {
+    justify-content: flex-start;
+    padding: 0 0 0 0.4rem;
+}
+
+/* fret numbers under the board — same box model as the cells above,
+ * with transparent borders, so the columns line up exactly */
+
+.fret-numbers {
+    display: flex;
+    margin-top: 0.2rem;
+}
+
+.fret-number {
+    box-sizing: border-box;
+    flex-shrink: 0;
+    border-left: 0.24rem solid transparent;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--board-text);
+}
+
+.nut-number {
+    box-sizing: border-box;
+    flex-shrink: 0;
+    width: 2.5rem;
+    border-right: 0.5rem solid transparent;
+}
+
+/* voicing browser for the "Show tab" spotlight */
+
+#voicing-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.3rem 0;
+    font-size: 0.95rem;
+    color: rgb(70, 70, 70);
+}
+
+#voicing-bar button {
+    font-family: inherit;
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 0.1rem 0.5rem;
+}
+
+#voicing-bar.dimmed {
+    opacity: 0.45;
+}
+
+#voicing-all-label,
+#voicing-inv-label {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-left: 0.8rem;
+    font-weight: bold;
+}
+
+/* legend swatches in "all voicings" mode */
+.voicing-swatch {
+    display: inline-block;
+    margin: 0 0.2rem;
+    padding: 0.05rem 0.5rem;
+    border-radius: 1rem;
+    color: white;
+    font-size: 0.85rem;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+
+
+/* note input and actions below the board */
+
+.board-note-row {
+    margin-top: 0.5rem;
+}
+
+/* the comment box is collapsed by default (a small "+ Add comment"
+ * toggle) so it doesn't clutter the view when unused */
+#comment-details > summary {
+    cursor: pointer;
+    font-weight: bold;
+    width: fit-content;
+    list-style: none;
+    color: rgb(90, 90, 90);
+}
+
+#comment-details > summary::-webkit-details-marker {
+    display: none;
+}
+
+#comment-details > summary::before {
+    content: "+ ";
+}
+
+#comment-details[open] > summary::before {
+    content: "\2013 ";
+}
+
+#board-comment {
+    box-sizing: border-box;
+    width: min(36rem, 100%);
+    margin-top: 0.4rem;
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 0.25rem 0.5rem;
+    resize: vertical;
+}
+
+.board-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.8rem 0 1rem;
+}
+
+#sheet-section {
+    margin: 1rem 0;
+}
+
+#sheet-music {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+#clef-select {
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+.sheet-option {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* collection preview: thumbnails with reorder/remove controls */
+
+.collection-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin: 0.5rem 0 1rem;
+}
+
+.collection-item {
+    border: 1px solid rgb(210, 210, 210);
+    padding: 0.3rem;
+    background: white;
+}
+
+.collection-item img {
+    display: block;
+    width: 260px;
+    max-width: 70vw;
+}
+
+.collection-item-controls {
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: 0.3rem;
+}
+
+.collection-item-controls button {
+    font-family: inherit;
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 0.05rem 0.5rem;
+}
+
+/* donations */
+
+.donate {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.7rem;
+    margin-top: 1rem;
+}
+
+.donate-btn {
+    display: inline-block;
+    padding: 0.35rem 1rem;
+    border-radius: 0.4rem;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.donate-btn.donate-stripe {
+    background: rgb(99, 91, 255);
+    color: white;
+}
+
+.donate-btn.donate-paypal {
+    background: #FFC439;   /* PayPal button gold */
+    color: #003087;        /* PayPal navy */
+}
+/* PayPal wordmark: two-tone italic "PayPal", the way the logo reads */
+.paypal-mark {
+    font-style: italic;
+    font-weight: bold;
+    letter-spacing: -0.02em;
+}
+.paypal-mark .pp-pay {
+    color: #253B80;   /* dark blue */
+}
+.paypal-mark .pp-pal {
+    color: #179BD7;   /* light blue */
+}
+.donate-btn.donate-paypal .pp-donate {
+    font-weight: bold;
+}
+
+/* chord box diagram, shown while a chord preset is selected */
+#chord-diagram {
+    margin: 0.5rem 0 1rem;
+}
+
+.board-actions button {
+    font-family: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.3rem 0.8rem;
+}
+
+.zoom-controls {
+    display: flex;
+    gap: 0.25rem;
+    margin-left: 0.5rem;
+}
+
+.zoom-controls button {
+    width: 2.2rem;
+    padding: 0.3rem 0;
+    font-weight: bold;
+}
+
+/* phones */
+
+@media (max-width: 600px) {
+    body {
+        margin: 0.8rem 1rem;
+    }
+
+    .control-row {
+        gap: 0.6rem 1rem;
+    }
+
+    .header-bar {
+        margin-top: 0.3rem;
+    }
+}
+
+/* ---- SEO landing pages (scales/, chords/, guides.html) ----
+   Shared here so the 66+ generated pages don't each carry a duplicate
+   <style> block; landing.py just emits the markup. */
+.lp { max-width: 44rem; margin: 1.5rem auto; padding: 0 1.2rem; }
+.lp h1 { margin: 0 0 1.4rem; font-size: 1.6rem; }
+.lp .fig { margin: 0 0 2.4rem; }
+.lp .facts { font-weight: bold; margin: 0 0 0.4rem; }
+.lp .board { margin: 0; }
+.lp .cap { font-size: 1rem; color: rgb(90, 90, 90); margin: 0.55rem 0 0; }
+.lp p { line-height: 1.55; color: rgb(60, 60, 60); }
+.lp .pitch { color: rgb(110, 110, 110); }
+.lp .related { font-size: 0.95rem; margin-top: 0.6rem; }
+.lp .cta {
+    display: inline-block;
+    margin: 0.4rem 0 1rem;
+    padding: 0.55rem 1.1rem;
+    background: rgb(70, 70, 70);
+    color: white;
+    text-decoration: none;
+    border-radius: 0.4rem;
+    font-weight: bold;
+}

@@ -1,1 +1,179 @@
-<h5>test 2</a></h5>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <title>holyfret</title>
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="6965804f-4d5c-4cfc-b5bf-bd032e76d211"></script>
+</head>
+
+<body>
+
+    <header>
+        <div class="header-bar">
+            <a class="logo" id="logo" href="index.html" data-t="ui.logo">holyfret.com</a>
+            <nav class="sitenav"><a href="index.html" data-t="ui.nav.home">Home</a> &middot;
+                <a href="index.html" data-t="ui.nav.tutorials">Tutorials</a> &middot;
+                <a href="index.html" data-t="ui.nav.about">About</a></nav>
+        </div>
+        <p class="slogan"><span id="slogan">Get a grip on the fretboard</span>.
+            <span data-t="ui.sloganCont">See any scale, chord or interval on many string
+                instruments &mdash; hear it, save it, share a link.</span></p>
+    </header>
+
+    <section class="options">
+
+        <div class="control-row">
+            <label><span data-t="ui.controls.instrument">Instrument</span>
+                <input id="instrument-input" autocomplete="off">
+            </label>
+            <label><span data-t="ui.controls.tuning">Tuning</span>
+                <input id="tuning-input" autocomplete="off">
+            </label>
+            <label><span data-t="ui.controls.strings">Strings</span>
+                <input type="number" id="strings-input" min="1" max="12">
+            </label>
+            <label><span data-t="ui.controls.frets">Frets</span>
+                <input type="number" id="frets-input" min="3" max="36">
+            </label>
+            <label class="checkbox-label"><span data-t="ui.controls.lefty">Left-handed</span>
+                <input type="checkbox" id="lefty">
+            </label>
+            <label><span data-t="ui.controls.theme">Theme</span>
+                <select id="theme-select"></select>
+            </label>
+        </div>
+
+        <div class="control-row">
+            <label><span data-t="ui.controls.key">Key</span>
+                <span class="pair">
+                    <select id="key-select"></select>
+                    <select id="accidental-select" data-tt="ui.tooltips.accidental" title="Spell keys with flats or sharps">
+                        <option value="flat">&#9837;</option>
+                        <option value="sharp">&#9839;</option>
+                    </select>
+                </span>
+            </label>
+            <label><span data-t="ui.controls.scale">Scale</span>
+                <input id="scale-input" data-tp="ui.placeholders.search" placeholder="Type to search" autocomplete="off">
+            </label>
+            <label><span data-t="ui.controls.chord">Chord</span>
+                <input id="chord-input" data-tp="ui.placeholders.search" placeholder="Type to search" autocomplete="off">
+            </label>
+            <label><span data-t="ui.controls.displayMode">Display mode</span>
+                <select id="mode-select">
+                    <option value="intervals" data-t="ui.modes.intervals">Intervals</option>
+                    <option value="notes" data-t="ui.modes.notes">Notes</option>
+                    <option value="both" data-t="ui.modes.both">Both</option>
+                </select>
+            </label>
+            <label class="checkbox-label"><span data-t="ui.controls.sheetMusic">Sheet music</span>
+                <input type="checkbox" id="show-sheet">
+            </label>
+            <label class="checkbox-label" data-tt="ui.tooltips.showChordShape" title="Spotlight a playable chord shape of the selected tones"><span data-t="ui.controls.showChordShape">Show chord shape</span>
+                <input type="checkbox" id="show-tab">
+            </label>
+            <label class="checkbox-label" data-tt="ui.tooltips.freehand" title="Click the board to hand-pick exact frets, e.g. one specific voicing"><span data-t="ui.controls.freehand">Freehand</span>
+                <input type="checkbox" id="free-hand">
+            </label>
+            <button id="full-reset" data-t="ui.buttons.resetAll" data-tt="ui.tooltips.resetAll"
+                title="Back to defaults; clears the saved settings and the selection">Reset all</button>
+        </div>
+
+        <div id="custom-tuning-section" hidden>
+            <div class="section-label" data-t="ui.controls.customTuning">Custom tuning (low string &rarr; high)</div>
+            <div id="custom-tuning" class="control-row"></div>
+        </div>
+
+        <div id="selection-section">
+            <div class="section-head">
+                <span class="section-label" id="selection-label">Intervals</span>
+                <button id="reset-selection" data-t="ui.buttons.clearSelection" data-tt="ui.tooltips.clearSelection" title="Uncheck everything">Clear</button>
+            </div>
+            <div id="selection-checkboxes" class="control-row"></div>
+            <label class="interval-checkbox"><span data-t="ui.controls.showAll">Show all notes/intervals</span>
+                <input type="checkbox" id="show-all">
+            </label>
+        </div>
+
+        <div id="sheet-section" hidden>
+            <div class="section-head">
+                <span class="section-label" data-t="ui.sections.sheetMusic">Sheet music</span>
+                <select id="clef-select" data-tt="ui.tooltips.clef" title="Clef"></select>
+                <label class="sheet-option"><span data-t="ui.controls.applyKeySignature">Apply key signature</span>
+                    <input type="checkbox" id="key-signature">
+                </label>
+            </div>
+            <div id="sheet-music"></div>
+        </div>
+
+    </section>
+
+    <div id="summary" class="summary"></div>
+    <div class="matches">
+        <div id="chord-matches" class="match-line" hidden></div>
+        <div id="scale-matches" class="match-line" hidden></div>
+    </div>
+
+    <div id="voicing-bar" hidden>
+        <button id="voicing-prev" data-tt="ui.tooltips.voicingPrev" title="Previous voicing">&#9664;</button>
+        <span id="voicing-label"></span>
+        <button id="voicing-next" data-tt="ui.tooltips.voicingNext" title="Next voicing">&#9654;</button>
+        <label id="voicing-all-label" data-tt="ui.tooltips.showAllVoicings" title="Highlight every voicing at once, one color each">
+            <span data-t="ui.controls.showAllVoicings">Show all voicings</span>
+            <input type="checkbox" id="voicing-all">
+        </label>
+        <label id="voicing-inv-label" data-tt="ui.tooltips.inversions" title="Also allow shapes with a chord tone other than the root in the bass">
+            <span data-t="ui.controls.inversions">Inversions</span>
+            <input type="checkbox" id="voicing-inv">
+        </label>
+    </div>
+
+    <div id="fretboard-container"></div>
+
+    <details class="board-note-row" id="comment-details">
+        <summary data-t="ui.controls.addComment">Add comment</summary>
+        <textarea id="board-comment" rows="2" maxlength="300"
+            data-tp="ui.placeholders.comment" placeholder="This appears in the saved image"></textarea>
+    </details>
+
+    <div class="board-actions">
+        <button id="save-image" data-t="ui.buttons.saveImage" data-tt="ui.tooltips.saveImage" title="Download the fretboard as a PNG image">Save image</button>
+        <button id="copy-link" data-t="ui.buttons.copyLink" data-tt="ui.tooltips.copyLink" title="Copy a shareable link to this exact view">Copy link</button>
+        <button id="collection-add" data-t="ui.buttons.collectionAdd" data-tt="ui.tooltips.collectionAdd" title="Add this fretboard to the collection">Add to collection</button>
+        <button id="collection-save" data-t="ui.buttons.collectionSave" data-tt="ui.tooltips.collectionSave" title="Download all collected fretboards as one PNG" disabled hidden>Save collection as image</button>
+        <button id="collection-clear" data-t="ui.buttons.collectionClear" data-tt="ui.tooltips.collectionClear" title="Empty the collection" hidden>Clear collection</button>
+        <span class="zoom-controls">
+            <button id="zoom-out" data-tt="ui.tooltips.zoomOut" title="Smaller fretboard">&minus;</button>
+            <button id="zoom-in" data-tt="ui.tooltips.zoomIn" title="Bigger fretboard">+</button>
+        </span>
+    </div>
+
+    <div id="collection-preview" class="collection-preview" hidden></div>
+
+    <footer>
+        <p class="footer-info" data-t="ui.footer">
+            Everything here is free — if you find it valuable, any support is welcome.</p>
+        <div class="donate">
+            <a class="donate-btn donate-paypal" target="_blank" rel="noopener"
+                href="https://www.paypal.com/donate/?hosted_button_id=QRND2NQ9RTA6Q"
+                aria-label="Donate with PayPal"><span class="paypal-mark"><span
+                    class="pp-pay">Pay</span><span class="pp-pal">Pal</span></span>
+                <span class="pp-donate">Donate</span></a>
+        </div>
+    </footer>
+
+    <script async src="vendor/abcjs-basic-min.js"></script>
+
+    <script src="copy.js"></script>
+    <script src="theory.js"></script>
+    <script src="data.js"></script>
+    <script src="fretboard.js"></script>
+    <script src="combobox.js"></script>
+    <script src="main.js"></script>
+
+</body>
+
+</html>
