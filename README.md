@@ -22,6 +22,10 @@ I did the first version of this in python many years ago, then mainly focusing o
 
 Any contribution to the project is warmly welcome, requests, feedback, bugs?
 
+# Screenshots
+
+![Holyfret showing a chord on a bass fretboard](docs/screenshot_bass_1.png)
+
 ## License
 
 MIT — see [LICENSE](LICENSE). Bundled third-party assets under `src/vendor/` keep their
