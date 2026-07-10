@@ -12,18 +12,17 @@ Does the world really need another fret visualizing tool? Well, probably not. Bu
 - Focus on intervals
 - Easy to share a custom chord, arpeggio or scale by simply copying the url
 - Support for different string instruments, tunings and also things like left-handed players
-- Nice, and hopefully simple UI without sacrificing power
+- Hopefully simple UI without sacrificing power
 - Ability to save one or multiple fretboards, useful for teaching and/or printouts
-- No sign-up, paywall, and things like that.. I really 
+- No sign-up, free of cookies
 
 I did the first version of this in python many years ago, then mainly focusing on intervals as I personally find that to be important to practice learning. Now it has grown quite large, and with a little time on my hands and the help of coding agents I could scale it up quite quickly to include more functionality (I'm not a web developer really).
 
 # Development
 
-Any contribution to the project is welcome, requests, feedback, bugs?
+Any contribution to the project is warmly welcome, requests, feedback, bugs?
 
 ## License
 
-MIT — see [LICENSE](LICENSE). The "holyfret" name and logo are reserved and are
-not part of the grant. Bundled third-party assets under `src/vendor/` keep their
+MIT — see [LICENSE](LICENSE). Bundled third-party assets under `src/vendor/` keep their
 own licenses (see `src/vendor/LICENSES.md`).

@@ -1571,7 +1571,19 @@ document.getElementById('full-reset').addEventListener('click', () => {
     try {
         localStorage.removeItem(STORAGE_KEY);
     } catch (e) { /* ignore */ }
-    location.replace(location.pathname + '?intervals='); // defaults, nothing selected
+    /* Reset everything but the selected instrument */
+    const p = new URLSearchParams();
+    p.set('instrument', state.instrument);
+    if (state.instrument === CUSTOM) {
+        // a custom instrument has no named tunings — keep its pitches
+        p.set('tuning', CUSTOM);
+        p.set('pitches', state.customTuning.join('.'));
+    } else {
+        // reset to the instrument's default (first) tuning
+        p.set('tuning', Object.keys(INSTRUMENTS[state.instrument].tunings)[0]);
+    }
+    p.set('intervals', ''); // clear the selection; everything else omitted → defaults
+    location.replace(location.pathname + '?' + p.toString());
 });
 
 document.getElementById('zoom-in').addEventListener('click', () => changeZoom(0.2));
