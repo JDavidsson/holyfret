@@ -40,6 +40,7 @@ const state = {
     freehand: false,                   // hand-pick exact frets by clicking
     picks: new Set(),                  // "string:fret" positions (free hand)
     theme: 'Default',                  // a THEMES name
+    sound: false,                      // play a pluck on note/pick clicks (off by default)
 };
 
 const instrumentInput = document.getElementById('instrument-input');
@@ -59,6 +60,7 @@ const clefSelect = document.getElementById('clef-select');
 const keySigCheckbox = document.getElementById('key-signature');
 const tabCheckbox = document.getElementById('show-tab');
 const freehandCheckbox = document.getElementById('free-hand');
+const soundCheckbox = document.getElementById('sound-toggle');
 const voicingBar = document.getElementById('voicing-bar');
 const voicingLabel = document.getElementById('voicing-label');
 const voicingPrev = document.getElementById('voicing-prev');
@@ -407,6 +409,9 @@ function sheetTokens() {
 let audioContext = null;
 
 function playTone(semitone, delay = 0) {
+    if (!state.sound) {
+        return; // audio is opt-in (off by default)
+    }
     audioContext = audioContext
         ?? new (window.AudioContext || window.webkitAudioContext)();
     if (audioContext.state === 'suspended') {
@@ -675,17 +680,19 @@ function findVoicings(pcs, tuning, rootPc, maxFret, allowInversions = false) {
 /* clicking a fret: in free hand it toggles that exact position; in the
  * normal modes it toggles the tone (in both vocabularies, they sync) */
 function toggleCell(cell, string, fret) {
+    const pitch = currentTuning()[string] + fret - 60; // the pressed fret's actual pitch
     if (state.freehand) {
         const key = string + ':' + fret;
         if (!state.picks.delete(key)) {
             state.picks.add(key);
-            playTone(currentTuning()[string] + fret - 60); // sound the added note
+            playTone(pitch); // sound the added note
         }
         render();
         return;
     }
     if (!state.intervals.delete(cell.interval)) {
         state.intervals.add(cell.interval);
+        playTone(pitch); // sound the added note
     }
     syncSelectionCheckboxes();
     clearPresets();
@@ -905,6 +912,9 @@ function stateToParams() {
     if (state.freehand) {
         p.set('fh', '1');
     }
+    if (state.sound) {
+        p.set('sound', '1');
+    }
     if (state.picks.size) {
         p.set('picks', [...state.picks].join(','));
     }
@@ -953,6 +963,7 @@ function applyParams(q) {
     state.voicingAll = p.get('voicingall') === '1';
     state.inversions = !state.voicingAll && p.get('inv') === '1';
     state.freehand = p.get('fh') === '1';
+    state.sound = p.get('sound') === '1';
     state.picks = new Set((p.get('picks') ?? '').split(',')
         .filter(k => /^\d+:\d+$/.test(k)).slice(0, 100));
     const voicingIndex = Number(p.get('voicing'));
@@ -1070,6 +1081,7 @@ function syncAllControls(presets) {
     sheetCheckbox.checked = state.sheet;
     tabCheckbox.checked = state.tab;
     freehandCheckbox.checked = state.freehand;
+    soundCheckbox.checked = state.sound;
     keySigCheckbox.checked = state.keysig;
     clefSelect.value = state.clef;
     themeSelect.value = state.theme;
@@ -1470,6 +1482,14 @@ freehandCheckbox.addEventListener('change', () => {
 leftyCheckbox.addEventListener('change', () => {
     state.lefty = leftyCheckbox.checked;
     render();
+});
+
+soundCheckbox.addEventListener('change', () => {
+    state.sound = soundCheckbox.checked;
+    if (state.sound) {
+        playTone(0); // unlock the audio context on this user gesture + preview
+    }
+    persistState();
 });
 
 sheetCheckbox.addEventListener('change', () => {
