@@ -2,10 +2,11 @@
    Edit copy.json and re-run `python3 landing.py` (or copybuild.py). */
 window.COPY = {
   "ui": {
-    "title": "holyfret",
+    "title": "holyfret — scales, chords & intervals on the fretboard",
     "logo": "holyfret.com",
     "nav": {
       "home": "Home",
+      "guides": "Guides",
       "tutorials": "Tutorials",
       "about": "About"
     },
@@ -119,10 +120,10 @@ window.COPY = {
       "Move the scale through every key, view it as notes or intervals, hand-pick your own fingering, hear it, and build a collection of boards you can save as a single image. Free to use."
     ],
     "pitchChord": [
-      "In the full app you can step through every voicing of this chord up the neck, hear each one, read it as sheet music, and view it as note names or intervals. It's free to use.",
+      "In the full app you can step through its playable voicings up the neck, hear each one, read it as sheet music, and view it as note names or intervals. It's free to use.",
       "See the chord's shapes on various string instruments and in any key, compare it with related chords, and save the diagram as an image or share it with a link.",
       "Browse the playable voicings, spotlight one on the board, switch between notes and intervals, and collect several chords into a single practice sheet. It's free, and every feature is included.",
-      "Find every shape for this chord, hear it, read it on a staff in your choice of clef, set a custom tuning, and download a fretboard image or a shareable link — free to use."
+      "Find its playable shapes, hear it, read it on a staff in your choice of clef, set a custom tuning, and download a fretboard image or a shareable link — free to use."
     ],
     "guides": {
       "title": "Scale, intervals, chord guides and more — holyfret",
@@ -136,7 +137,7 @@ window.COPY = {
       "title": "About — holyfret",
       "desc": "About holyfret, a free fretboard tool for scales, chords and intervals on many string instruments.",
       "h1": "",
-      "body": "<p>This app is a free, in-browser tool for seeing scales, chords and intervals across the fretboard of many string instruments. So.. does the world really need another fret visualizing tool? Well, probably not. But this one does exactly what I want for myself i.e.</p>\n  <ul>\n    <li>Focus on intervals</li>\n    <li>Easy to share a custom chord, arpeggio or scale by simply copying the url</li>\n    <li>Support for different string instruments, tunings and also things like left-handed players</li>\n    <li>Hopefully simple UI without sacrificing power</li>\n    <li>Ability to save one or multiple fretboards, useful for teaching and/or printouts</li>\n    <li>No sign-up, free of cookies</li>\n  </ul>\n  <p>It's open source — the code lives on <a href=\"https://github.com/JDavidsson/holyfret\">GitHub</a>. Requests for improvements or other feedback can be sent to holyfret @ protonmail . com</p>"
+      "body": "<p>This app is a free, in-browser tool for seeing scales, chords and intervals across the fretboard of many string instruments. So.. does the world really need another fret visualizing tool? Well, probably not. But this one does exactly what I want for myself i.e.</p>\n  <ul>\n    <li>Focus on intervals</li>\n    <li>Easy to share a custom chord, arpeggio or scale by simply copying the url</li>\n    <li>Support for different string instruments, tunings and also things like left-handed players</li>\n    <li>Hopefully simple UI without sacrificing power</li>\n    <li>Ability to save one or multiple fretboards, useful for teaching and/or printouts</li>\n    <li>No sign-up, free of cookies</li>\n  </ul>\n  <p>On privacy: holyfret needs no sign-up and sets no cookies. It uses Umami — a privacy-friendly analytics service — to measure traffic.</p>\n  <p>It's open source — the code lives on <a href=\"https://github.com/JDavidsson/holyfret\">GitHub</a>. Requests for improvements or other feedback can be sent to holyfret @ protonmail . com</p>"
     }
   }
 };
