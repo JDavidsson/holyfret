@@ -131,6 +131,12 @@ window.COPY = {
       "intro": "Reference pages for common scales and chords on some string instruments. Each opens on an interactive fretboard for <a href=\"index.html\">holyfret</a>.",
       "scales": "Scales",
       "chords": "Chords"
+    },
+    "about": {
+      "title": "About — holyfret",
+      "desc": "About holyfret, a free fretboard tool for scales, chords and intervals on many string instruments.",
+      "h1": "About holyfret",
+      "body": "<p>This app is a free, in-browser tool for seeing scales, chords and intervals across the fretboard of many string instruments.</p>\n  <p>Does the world really need another fret visualizing tool? Well, probably not. But this one does exactly what I want for myself i.e.</p>\n  <ul>\n    <li>Focus on intervals</li>\n    <li>Easy to share a custom chord, arpeggio or scale by simply copying the url</li>\n    <li>Support for different string instruments, tunings and also things like left-handed players</li>\n    <li>Hopefully simple UI without sacrificing power</li>\n    <li>Ability to save one or multiple fretboards, useful for teaching and/or printouts</li>\n    <li>No sign-up, free of cookies</li>\n  </ul>\n  <p>It's open source — the code lives on <a href=\"https://github.com/JDavidsson/holyfret\">GitHub</a>.</p>\n  <p>Requests for improvements or other feedback can be sent to holyfret @ protonmail . com</p>"
     }
   }
 };
