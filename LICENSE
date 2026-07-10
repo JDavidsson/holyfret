@@ -22,8 +22,7 @@ SOFTWARE.
 
 ---
 
-This license covers the holyfret source code. It does NOT grant rights to the
-"holyfret" name, logo, or branding, which are reserved.
+This license covers the holyfret source code.
 
 Third-party assets bundled in src/vendor/ are under their own licenses
 (abcjs: MIT; Karla: SIL OFL 1.1) — see src/vendor/LICENSES.md.
