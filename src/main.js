@@ -1639,6 +1639,7 @@ function downloadCanvas(canvas, nameParts) {
 document.getElementById('save-image').addEventListener('click', async () => {
     let canvas = drawFretboardCanvas(lastNeck, {
         ...lastOpts,
+        headline: false,
         caption: summaryLine.textContent,
         comment: state.comment,
         colors: THEMES[state.theme],
@@ -1734,7 +1735,7 @@ collectionSaveButton.addEventListener('click', async () => {
     const canvases = await Promise.all(collection.map(async (snap, i) => {
         const board = drawFretboardCanvas(snap.neck, {
             ...snap.opts,
-            headline: i === 0, // the shared headline only once, at the top
+            headline: false,
             caption: snap.caption,
             comment: snap.comment,
             colors: snap.colors,
