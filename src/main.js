@@ -705,11 +705,49 @@ function toggleCell(cell, string, fret) {
  * both:      "C Major: 1 3 5 (C E G)" */
 function updateSummary() {
     const names = noteNames();
+    delete summaryLine.dataset.caption; // plain-text image caption (freehand sets it below)
     if (state.freehand) {
         const pcs = [...new Set(pickedPcs())];
-        summaryLine.textContent = pcs.length
-            ? T(C.messages.freehand, { notes: pcs.map(pc => names[pc]).join(' '), n: state.picks.size })
-            : C.messages.freehandEmpty;
+        if (!pcs.length) {
+            summaryLine.textContent = C.messages.freehandEmpty;
+            return;
+        }
+        // Notes on top, Intervals directly beneath — one column per note so
+        // each interval lines up under its note. Intervals are measured from
+        // the key, matching the board's own labels; shown when the mode asks.
+        const showIvs = state.mode === 'intervals' || state.mode === 'both';
+        const root = keyIndex(state.key);
+        const ordered = [...pcs].sort((a, b) => showIvs
+            ? ((a - root + 12) % 12) - ((b - root + 12) % 12)
+            : a - b);
+        const notesLbl = C.messages.notesPrefix || 'Notes: ';
+        const ivsLbl = ((C.messages.selectionLabel && C.messages.selectionLabel.intervals)
+            || 'Intervals') + ':';
+
+        const grid = document.createElement('div');
+        grid.className = 'freehand-legend';
+        grid.style.gridTemplateRows = showIvs ? 'auto auto' : 'auto';
+        const cell = (text, cls) => {
+            const el = document.createElement('span');
+            el.className = cls;
+            el.textContent = text;
+            grid.appendChild(el);
+        };
+        cell(notesLbl, 'cell lbl');
+        if (showIvs) { cell(ivsLbl, 'cell lbl iv'); }
+        for (const pc of ordered) {
+            cell(names[pc], 'cell');
+            if (showIvs) { cell(INTERVAL_NAMES[(pc - root + 12) % 12], 'cell iv'); }
+        }
+        summaryLine.replaceChildren(grid);
+
+        // keep a clean one-line caption for saved images / collection snapshots
+        let caption = notesLbl + ordered.map(pc => names[pc]).join(' ');
+        if (showIvs) {
+            caption += '  ·  ' + ivsLbl + ' '
+                + ordered.map(pc => INTERVAL_NAMES[(pc - root + 12) % 12]).join(' ');
+        }
+        summaryLine.dataset.caption = caption;
         return;
     }
     const preset = scaleInput.value || chordInput.value;
@@ -1640,7 +1678,7 @@ document.getElementById('save-image').addEventListener('click', async () => {
     let canvas = drawFretboardCanvas(lastNeck, {
         ...lastOpts,
         headline: false,
-        caption: summaryLine.textContent,
+        caption: summaryLine.dataset.caption || summaryLine.textContent,
         comment: state.comment,
         colors: THEMES[state.theme],
     });
@@ -1720,7 +1758,7 @@ collectionAddButton.addEventListener('click', () => {
     }
     const p = stateToParams();
     p.delete('col'); // a snapshot must not nest the collection
-    p.set('caption', summaryLine.textContent);
+    p.set('caption', summaryLine.dataset.caption || summaryLine.textContent);
     if (state.sheet) {
         const built = currentAbc();
         if (built) {

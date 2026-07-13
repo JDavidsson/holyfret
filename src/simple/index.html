@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>holyfret · simple (freehand)</title>
+</head>
+
+<body>
+
+    <header>
+        <div class="header-bar">
+            <a class="logo" href="../index.html">holyfret.com</a>
+            <nav class="sitenav"><a href="../index.html">Home</a> &middot;
+                <a href="../index.html">Tutorials</a> &middot;
+                <a href="../about.html">About</a> &middot;
+                <a href="../guides.html">Guides</a></nav>
+        </div>
+        <p class="slogan"><span>Missing functionality?</span>
+            Switch to <a href="../index.html">holyfret.com</a> for the full version.</p>
+    </header>
+
+    <section class="options">
+        <div class="control-row">
+            <label><span>Instrument</span>
+                <select id="instrument-select"></select>
+            </label>
+            <label><span>Tuning</span>
+                <select id="tuning-select"></select>
+            </label>
+            <label title="The note that interval labels are measured from"><span>Root</span>
+                <select id="root-select"></select>
+            </label>
+            <label><span>Labels</span>
+                <select id="mode-select">
+                    <option value="notes">Notes</option>
+                    <option value="intervals">Intervals</option>
+                </select>
+            </label>
+            <label class="checkbox-label"><span>Left-handed</span>
+                <input type="checkbox" id="lefty">
+            </label>
+            <button id="clear">Clear</button>
+        </div>
+    </section>
+
+    <div id="summary" class="summary"></div>
+
+    <div id="board"></div>
+
+    <div class="board-actions">
+        <button id="save-image" title="Download the fretboard as a PNG image">Save image</button>
+        <button id="copy-link" title="Copy a shareable link to this exact view">Copy link</button>
+    </div>
+
+    <footer>
+        <p class="footer-info">Everything here is free — if you find it valuable, any support is welcome.</p>
+        <div class="donate">
+            <a class="donate-btn donate-paypal" target="_blank" rel="noopener"
+                href="https://www.paypal.com/donate/?hosted_button_id=QRND2NQ9RTA6Q"
+                aria-label="Donate with PayPal"><span class="paypal-mark"><span
+                        class="pp-pay">Pay</span><span class="pp-pal">Pal</span></span>
+                <span class="pp-donate">Donate</span></a>
+        </div>
+    </footer>
+
+    <script src="../theory.js"></script>
+    <script src="../data.js"></script>
+    <script src="../fretboard.js"></script>
+    <script src="simple.js"></script>
+
+</body>
+
+</html>

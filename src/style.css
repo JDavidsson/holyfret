@@ -225,6 +225,32 @@ footer {
     color: rgb(70, 70, 70);
 }
 
+/* free-hand summary: notes on top, intervals directly beneath, one column
+   per note so each interval lines up under its note */
+.freehand-legend {
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(1.4em, max-content);
+    column-gap: 0.55rem;
+    row-gap: 0.1rem;
+    justify-content: start;
+    align-items: center;
+}
+
+.freehand-legend .cell {
+    text-align: center;
+}
+
+.freehand-legend .lbl {
+    text-align: left;
+    font-weight: bold;
+    padding-right: 0.35rem;
+}
+
+.freehand-legend .iv {
+    opacity: 0.7;
+}
+
 /* chords/scales that the current selection contains or equals;
  * rendered as clickable chips, hover previews them on the board */
 .matches {
