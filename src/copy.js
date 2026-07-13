@@ -8,7 +8,8 @@ window.COPY = {
       "home": "Home",
       "guides": "Guides",
       "tutorials": "Tutorials",
-      "about": "About"
+      "about": "About",
+      "simple": "Simple"
     },
     "sloganCont": "Learning tool for players and/or teachers of various string instruments. Show intervals, notes, scales, arpeggios and more. Share by url, save as a bookmark or download it as a file.",
     "footer": "Everything here is free — if you find it valuable, any support is welcome. Requests for improvements or other feedback can be sent to holyfret @ protonmail . com",
